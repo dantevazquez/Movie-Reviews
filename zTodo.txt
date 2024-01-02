@@ -1,0 +1,3 @@
+This file is just to remind myself where I left off
+
+*I last finished adding a verify thing to the post movies router
