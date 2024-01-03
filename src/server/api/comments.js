@@ -3,7 +3,6 @@ const router = express.Router();
 const prisma = require("../client");
 const {verify} = require("../util");
 
-
 // GET /api/comments
 router.get("/", async (req, res, next) => {
   try {
@@ -47,7 +46,5 @@ router.post("/:id", verify, async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
 
 module.exports = router;

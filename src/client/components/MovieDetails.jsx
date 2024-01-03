@@ -4,45 +4,109 @@ import { useParams } from 'react-router-dom';
 import Review from './Review';
 
 function MovieDetails() {
-    const [movie, setMovie] = useState(null);
-    const [reviews, setReviews] = useState([]);
-    const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [textBody, setTextBody] = useState('');
+  const { id } = useParams();
+
+  //Gets the movie data and review data to later display
+  useEffect(() => {
+    async function getMovieDetails() {
+      try {
+        const { data: movieData } = await axios.get(`/api/movies/${id}`);
+        setMovie(movieData);
+
+        const { data: reviewsData } = await axios.get(`/api/reviews/${id}`);
+        setReviews(reviewsData);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getMovieDetails();
+  }, [id]);
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
   
-    useEffect(() => {
-      async function getMovieDetails() {
-        try {
-          const { data: movieData } = await axios.get(`/api/movies/${id}`);
-          setMovie(movieData);
+    try {
+      const token = localStorage.getItem('token');
   
-          const { data: reviewsData } = await axios.get(`/api/reviews/${id}`);
-          setReviews(reviewsData);
-        } catch (error) {
-          console.error(error);
-        }
+      //if token ia not valid, dont let user submit review
+      if (!token) {
+        console.error('User not authenticated');
+        window.alert('You must log in before you can submit a review!');
+        return;
       }
   
-      getMovieDetails();
-    }, [id]);
+      //convert string number to a number
+      const numericRating = parseInt(rating, 10);
+      const reviewData = { rating: numericRating, textBody };
   
-    if (!movie) {
-      return <div>Loading...</div>;
+      //post data to server
+      const response = await axios.post(
+        `/api/reviews/${id}`,
+        reviewData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    
+      const updatedReviews = await axios.get(`/api/reviews/${id}`);
+  
+      setReviews(updatedReviews.data);
+  
+      // Clear the form fields
+      setRating(0);
+      setTextBody('');
+    } catch (error) {
+      console.error('Error submitting review:', error);
     }
+  };
   
-    return (
-      <div>
-        <h2>{movie.name}</h2>
-        <img src={movie.imgLink} alt={movie.name} style={{ maxWidth: '100%' }} />
-        <p>Average Rating: {movie.avgRating}</p>
-        <p>Genre: {movie.genre}</p>
-        <p>Release Year: {movie.releaseYear}</p>
-        <p>Director: {movie.director}</p>
-  
-        <h3>Reviews</h3>
-        {reviews.map((review) => (
-          <Review key={review.id} review={review} />
-        ))}
-      </div>
-    );
+  //give prog time to load movie
+  if (!movie) {
+    return <div>Loading...</div>;
   }
-  
-  export default MovieDetails;
+
+  return (
+    <div>
+      <h2>{movie.name}</h2>
+      <img src={movie.imgLink} alt={movie.name} style={{ maxWidth: '100%' }} />
+      <p>Average Rating: {movie.avgRating}</p>
+      <p>Genre: {movie.genre}</p>
+      <p>Release Year: {movie.releaseYear}</p>
+      <p>Director: {movie.director}</p>
+
+      <h3>Reviews</h3>
+      {reviews.map((review) => (
+        <Review key={review.id} review={review} />
+      ))}
+
+      <h3>Write a Review</h3>
+      <form onSubmit={handleReviewSubmit}>
+        <label>
+          Rating:
+          <input
+            type="number"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            min="1"
+            max="5"
+          />
+        </label>
+        <br />
+        <label>
+          Review:
+          <textarea
+            value={textBody}
+            onChange={(e) => setTextBody(e.target.value)}
+          />
+        </label>
+        <br />
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
+  );
+}
+
+export default MovieDetails;
