@@ -58,6 +58,8 @@ async function main() {
     },
   });
 
+  //This is important because its the initial admin account.
+  //Only this account will be able to make other users admin
   const hashedAdminPassword = await bcrypt.hash('admin123', saltRounds);
   const user3 = await prisma.user.create({
     data: {

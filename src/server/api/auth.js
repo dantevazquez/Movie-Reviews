@@ -3,7 +3,10 @@ const router = express.Router();
 const prisma = require("../client");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const {verify} = require("../util");
 
+
+//POST auth/login
 router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -34,18 +37,18 @@ router.post("/login", async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user.id, username: user.username, isAdmin: user.isAdmin },
       process.env.JWT_SECRET
     );
 
-    res.status(200).send({ token, user: { id: user.id, username: user.username } });
+    res.status(200).send({ token, user: { id: user.id, username: user.username, isAdmin: user.isAdmin } });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
   }
 });
 
-
+//POST auth/register
 router.post("/register", async (req, res, next) => {
   
   const { username, password, email } = req.body;
@@ -85,5 +88,39 @@ router.post("/register", async (req, res, next) => {
     console.error(error);
   }
 });
+
+// POST auth/make-admin
+//Only the admin seeded has access to this call initially
+router.post("/make-admin/:id", verify, async (req, res, next) => {
+  const userId = parseInt(req.params.id);
+
+  try {
+    // Check if the user making the request is an admin
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ error: 'Unauthorized. Only admins can make users admin.' });
+    }
+
+    // Check if the user to be made admin exists
+    const userToMakeAdmin = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userToMakeAdmin) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Make the user admin
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { isAdmin: true },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

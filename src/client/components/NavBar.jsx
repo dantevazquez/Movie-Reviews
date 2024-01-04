@@ -1,8 +1,6 @@
-// NavBar.js
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../App.css'; // Import the CSS file
+import '../App.css';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -23,10 +21,11 @@ function NavBar() {
 
   // Read user information from cache
   const user = JSON.parse(localStorage.getItem('user'));
+  console.log('User Information:', user);
 
   return (
     <nav className="navbar">
-      <Link to="/" className = "link-style">
+      <Link to="/" className="link-style">
         <img src="temp-logo.png" alt="Home" className="logo" />
       </Link>
 
@@ -37,12 +36,16 @@ function NavBar() {
           </button>
         )}
 
-        {/* This is the users drop down menu, TODO add more things maybe */}
-        {/* When user is logged in display this on top right nav */}
+        {/* This is the users drop-down menu */}
         {user && isDropdownOpen && (
           <div className="dropdown-menu">
-            <button onClick={handleLogout}>Logout</button>
             <button onClick={() => navigate('/profile')}>Profile</button>
+            <button onClick={handleLogout}>Logout</button>
+            {user.isAdmin && (
+              <Link to="/admin" style={{ textDecoration: 'none', color: 'black' }}>
+                <button>Admin</button>
+              </Link>
+            )}
           </div>
         )}
       </div>
@@ -58,3 +61,4 @@ function NavBar() {
 }
 
 export default NavBar;
+
