@@ -27,41 +27,6 @@ function MovieDetails() {
     getMovieDetails();
   }, [id]);
 
-  // const handleReviewSubmit = async (e) => {
-  //   e.preventDefault();
-  
-  //   try {
-  //     const token = localStorage.getItem('token');
-  
-  //     //if token ia not valid, dont let user submit review
-  //     if (!token) {
-  //       console.error('User not authenticated');
-  //       window.alert('You must log in before you can submit a review!');
-  //       return;
-  //     }
-  
-  //     //convert string number to a number
-  //     const numericRating = parseInt(rating, 10);
-  //     const reviewData = { rating: numericRating, textBody };
-  
-  //     //post data to server
-  //     const response = await axios.post(
-  //       `/api/reviews/${id}`,
-  //       reviewData,
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-    
-  //     const updatedReviews = await axios.get(`/api/reviews/${id}`);
-  
-  //     setReviews(updatedReviews.data);
-  
-  //     // Clear the form fields
-  //     setRating(0);
-  //     setTextBody('');
-  //   } catch (error) {
-  //     console.error('Error submitting review:', error);
-  //   }
-  // };
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
   
