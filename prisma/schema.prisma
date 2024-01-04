@@ -1,3 +1,55 @@
+// // This is your Prisma schema file,
+// // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model Movie {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   genre     String
+//   releaseYear Int
+//   director  String
+//   imgLink   String
+//   avgRating Float
+//   reviews   Review[]
+// }
+
+// model User {
+//   id       Int      @id @default(autoincrement())
+//   username String   @unique
+//   password String
+//   email    String   @unique
+//   isAdmin  Boolean
+//   reviews  Review[]
+//   comments Comment[]
+// }
+
+// model Review {
+//   id       Int      @id @default(autoincrement())
+//   rating   Int
+//   textBody String
+//   movie    Movie    @relation(fields: [movieId], references: [id])
+//   movieId  Int
+//   user     User     @relation(fields: [userId], references: [id])
+//   userId   Int
+//   comments Comment[]
+// }
+
+// model Comment {
+//   id       Int      @id @default(autoincrement())
+//   textBody String
+//   user     User     @relation(fields: [userId], references: [id])
+//   userId   Int
+//   review   Review   @relation(fields: [reviewId], references: [id])
+//   reviewId Int
+// }
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -35,9 +87,9 @@ model Review {
   id       Int      @id @default(autoincrement())
   rating   Int
   textBody String
-  movie    Movie    @relation(fields: [movieId], references: [id])
+  movie    Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
   movieId  Int
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
   comments Comment[]
 }
@@ -45,8 +97,8 @@ model Review {
 model Comment {
   id       Int      @id @default(autoincrement())
   textBody String
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
-  review   Review   @relation(fields: [reviewId], references: [id])
+  review   Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId Int
 }
