@@ -37,3 +37,10 @@ router.delete("/:id", verify, async (req, res, next) => {})
 if (!req.user.isAdmin) {
     return res.status(403).json({ error: 'Unauthorized. Only admins can delete reviews.' });
 }
+
+
+//Implement profile page. Make sure to display all the necessary user information
+
+//Implement Admin page. Admin page will include a list of movies, the ability to
+remove or edit a movie (may need a route to edit movie), ability to remove comments 
+and reviews, etc
