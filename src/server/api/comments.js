@@ -17,8 +17,9 @@ router.get("/", async (req, res, next) => {
 
 //POST /api/comments/id
 router.post("/:id", verify, async (req, res, next) => {
-  const { textBody, userId } = req.body;
+  const { textBody } = req.body;
   const reviewId = parseInt(req.params.id);
+  const userId = req.user.id; 
 
   try {
     // Check if the review exists
@@ -46,5 +47,6 @@ router.post("/:id", verify, async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 module.exports = router;

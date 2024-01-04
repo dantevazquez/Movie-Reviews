@@ -27,13 +27,48 @@ function MovieDetails() {
     getMovieDetails();
   }, [id]);
 
+  // const handleReviewSubmit = async (e) => {
+  //   e.preventDefault();
+  
+  //   try {
+  //     const token = localStorage.getItem('token');
+  
+  //     //if token ia not valid, dont let user submit review
+  //     if (!token) {
+  //       console.error('User not authenticated');
+  //       window.alert('You must log in before you can submit a review!');
+  //       return;
+  //     }
+  
+  //     //convert string number to a number
+  //     const numericRating = parseInt(rating, 10);
+  //     const reviewData = { rating: numericRating, textBody };
+  
+  //     //post data to server
+  //     const response = await axios.post(
+  //       `/api/reviews/${id}`,
+  //       reviewData,
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+    
+  //     const updatedReviews = await axios.get(`/api/reviews/${id}`);
+  
+  //     setReviews(updatedReviews.data);
+  
+  //     // Clear the form fields
+  //     setRating(0);
+  //     setTextBody('');
+  //   } catch (error) {
+  //     console.error('Error submitting review:', error);
+  //   }
+  // };
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
   
     try {
       const token = localStorage.getItem('token');
   
-      //if token ia not valid, dont let user submit review
+      //if token is not valid, don't let the user submit a review
       if (!token) {
         console.error('User not authenticated');
         window.alert('You must log in before you can submit a review!');
@@ -50,9 +85,13 @@ function MovieDetails() {
         reviewData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-    
-      const updatedReviews = await axios.get(`/api/reviews/${id}`);
   
+      // Fetch the updated movie data including the average rating
+      const { data: updatedMovieData } = await axios.get(`/api/movies/${id}`);
+      setMovie(updatedMovieData);
+  
+      // Fetch the updated reviews data
+      const updatedReviews = await axios.get(`/api/reviews/${id}`);
       setReviews(updatedReviews.data);
   
       // Clear the form fields
@@ -62,6 +101,7 @@ function MovieDetails() {
       console.error('Error submitting review:', error);
     }
   };
+  
   
   //give prog time to load movie
   if (!movie) {

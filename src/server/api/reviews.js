@@ -65,12 +65,36 @@ router.get('/:id/comments', async (req, res) => {
   }
 });
 
-//This router posts review for a movie, if the movie is 
-//GET /api/reviews/id
+//Helper function for updateMovieAverageRating
+//Looks at the reviews and calculates the average rating of the movie
+function calculateAverageRating(reviews) {
+  if (reviews.length === 0) {
+    return 0;
+  }
+
+  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  return totalRating / reviews.length;
+}
+
+//helper function for POST api/reviews/movie-id
+const updateMovieAverageRating = async (movieId) => {
+  const reviews = await prisma.review.findMany({
+    where: { movieId },
+  });
+
+  const avgRating = calculateAverageRating(reviews);
+
+  await prisma.movie.update({
+    where: { id: movieId },
+    data: { avgRating },
+  });
+};
+
+//POST api/reviews/movie-id
 router.post("/:id", verify, async (req, res, next) => {
   const { rating, textBody } = req.body;
   const movieId = parseInt(req.params.id);
-  const userId = req.user.id; // Extract user ID from the token
+  const userId = req.user.id;
 
   try {
     // Check if the movie exists
@@ -90,8 +114,8 @@ router.post("/:id", verify, async (req, res, next) => {
       },
     });
 
-    // If a review already exists, update it instead of creating a new one
     if (existingReview) {
+      // If review exists, just update
       const updatedReview = await prisma.review.update({
         where: { id: existingReview.id },
         data: {
@@ -99,6 +123,10 @@ router.post("/:id", verify, async (req, res, next) => {
           textBody,
         },
       });
+
+      // Update the movie's average rating
+      await updateMovieAverageRating(movieId);
+
       res.status(200).json(updatedReview);
     } else {
       // Create a new review in the database
@@ -110,12 +138,17 @@ router.post("/:id", verify, async (req, res, next) => {
           user: { connect: { id: userId } },
         },
       });
+
+      // Update the movie's average rating
+      await updateMovieAverageRating(movieId);
+
       res.status(201).json(newReview);
     }
   } catch (error) {
-    console.error('Error processing request:', error);
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 module.exports = router;

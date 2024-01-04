@@ -10,3 +10,5 @@ Create a nav bar
 When user is not logged in nav bar has a sign in 
 when user is logged in, his or her name is displayed where sign in was
 the name when clicked sends the logged in user to his or her profile
+
+Jan 3 Goals: Implement comments and complete you lazy fuck (talking to myself)

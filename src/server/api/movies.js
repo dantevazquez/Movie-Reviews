@@ -34,32 +34,27 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post("/", verify, async (req, res, next) =>{
-    const {
-        name, 
-        genre, 
-        releaseYear, 
-        director, 
-        imgLink, 
-        avgRating,
-    } = req.body;
+router.post("/", verify, async (req, res, next) => {
+  const { name, genre, releaseYear, director, imgLink } = req.body;
 
-    try {
-        const movie = await prisma.movie.create({
-            data: {
-                name,
-                genre,
-                releaseYear,
-                director,
-                imgLink,
-                avgRating,
-            },
-        });
+  try {
+      const movie = await prisma.movie.create({
+          data: {
+              name,
+              genre,
+              releaseYear,
+              director,
+              imgLink,
+              avgRating: 0,
+          },
+      });
 
-        res.status(201).send(movie);
-    } catch (error) {
-        console.error(error);
-    }
-})
+      res.status(201).send(movie);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;
