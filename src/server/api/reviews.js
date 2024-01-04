@@ -150,5 +150,48 @@ router.post("/:id", verify, async (req, res, next) => {
   }
 });
 
+// delete api/reviews/review ID
+//this function deletes a review and its comments
+
+router.delete('/:reviewId', verify, async (req, res, next) => {
+  const reviewId = parseInt(req.params.reviewId);
+
+  //Check if the review to delete exists
+  try {
+    const existingReview = await prisma.review.findUnique({
+      where: { id: reviewId },
+      include: { comments: true },
+    });
+
+    if (!existingReview) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+
+    // Check if requester is the owner of the review or an admin
+    if (existingReview.userId !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ error: 
+        'Unauthorized. You do not have permission to delete this review.'});
+    }
+
+    // Delete the comments inside the review
+    const deleteComments = prisma.comment.deleteMany({
+      where: { reviewId },
+    });
+
+    // Delete the review
+    const deleteReview = prisma.review.delete({
+      where: { id: reviewId },
+    });
+
+    //had to add this in order to perform multiple delete queries
+    await prisma.$transaction([deleteComments, deleteReview]);
+
+    res.status(200).json("Succesfully delete Review and its assocaited comments");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;
