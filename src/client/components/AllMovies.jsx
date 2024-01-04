@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import '../App.css';
 
 function AllMovies() {
   const [movies, setMovies] = useState([]);
@@ -37,7 +38,7 @@ function AllMovies() {
       />
 
       {filteredMovies.map((movie) => (
-        <Link key={movie.id} to={`/movies/${movie.id}`}>
+        <Link key={movie.id} to={`/movies/${movie.id}`} className="link-style">
           <div style={{ border: "2px solid black", cursor: 'pointer' }}>
             <h3>{movie.name}</h3>
             <img src={movie.imgLink} alt={movie.name} style={{ maxWidth: '100%' }} />

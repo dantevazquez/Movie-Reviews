@@ -26,7 +26,7 @@ function NavBar() {
 
   return (
     <nav className="navbar">
-      <Link to="/">
+      <Link to="/" className = "link-style">
         <img src="temp-logo.png" alt="Home" className="logo" />
       </Link>
 
