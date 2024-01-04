@@ -11,7 +11,29 @@ When user is not logged in nav bar has a sign in
 when user is logged in, his or her name is displayed where sign in was
 the name when clicked sends the logged in user to his or her profile
 
-Jan 3 Goals: Implement comments and complete you lazy fuck (talking to myself)
+Jan 3 Goals: Implement comments and complete you lazy truck (talking to myself)
 
 Jan 4 TODO: Fill the profile page with the necessary stuff. show a list of users
 reviews, comments. Give user ability to remove review or comment from profile page
+
+
+Jan 4 team todo:
+
+We need api routes to delete movies, reviews and comments given the id of said item
+
+//DELETE api/movies/id
+router.delete("/:id", verify, async (req, res, next) => {})
+
+
+
+//DELETE api/reviews/id
+router.delete("/:id", verify, async (req, res, next) => {})
+
+//DELETE api/comment/id
+router.delete("/:id", verify, async (req, res, next) => {})
+
+
+//Separate: Add this line to make sure only admins can do certain functions
+if (!req.user.isAdmin) {
+    return res.status(403).json({ error: 'Unauthorized. Only admins can delete reviews.' });
+}
