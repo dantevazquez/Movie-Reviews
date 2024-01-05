@@ -71,7 +71,7 @@ router.delete("/:id", verify, async (req, res, next) => {
     }
 
     //check is the user is an admin
-    if (exisitingMovie.userId !== req.user.isAdmin) {
+    if (!req.user.isAdmin) {
       return res.status(403).json({ error: 'Unauthorized'});
     }
     
