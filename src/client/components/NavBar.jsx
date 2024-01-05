@@ -26,12 +26,16 @@ function NavBar() {
   return (
     <nav className="navbar">
       <Link to="/" className="link-style">
-        <img src="temp-logo.png" alt="Home" className="logo" />
+        <div className="logo-container">
+          <img src="https://img.icons8.com/doodle/48/potato--v1.png" alt="Home" className="logo" />
+          <h2>Rotten Potatoes</h2>
+        </div>
       </Link>
+
 
       <div className="dropdown-container">
         {user && (
-          <button className="dropdown-button" onClick={handleToggleDropdown}>
+          <button className="dropdown-button-main" onClick={handleToggleDropdown}>
             {user.username}
           </button>
         )}
@@ -39,23 +43,25 @@ function NavBar() {
         {/* This is the users drop-down menu */}
         {user && isDropdownOpen && (
           <div className="dropdown-menu">
-            <button onClick={() => navigate('/profile')}>Profile</button>
-            <button onClick={handleLogout}>Logout</button>
+            <button className="dropdown-button" onClick={() => navigate('/profile')}>Profile</button>
+            <button className="dropdown-button" onClick={handleLogout}>Logout</button>
             {user.isAdmin && (
-              <Link to="/admin" style={{ textDecoration: 'none', color: 'black' }}>
-                <button>Admin</button>
+              <Link to="/admin">
+                <button className="dropdown-button">Admin</button>
               </Link>
             )}
           </div>
         )}
+
+        {/* When user is not logged in display this */}
+        {!user && (
+          <Link to="/signin-register">
+            <button className="dropdown-button-main">Sign In</button>
+          </Link>
+        )}
       </div>
 
-      {/* When user is not logged in display this */}
-      {!user && (
-        <Link to="/signin-register" style={{ marginRight: '10px', textDecoration: 'none', color: 'white' }}>
-          <button>Sign In/Register</button>
-        </Link>
-      )}
+
     </nav>
   );
 }
