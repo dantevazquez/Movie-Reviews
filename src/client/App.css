@@ -170,6 +170,14 @@ img{
   margin-left: 5px;
 }
 
+/* Profile component */
+.review-item,
+.comment-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 
 
 

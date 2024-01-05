@@ -48,6 +48,33 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+//GET api/reviews/get-review/review id
+router.get('/get-review/:reviewId', async (req, res, next) => {
+  const reviewId = parseInt(req.params.reviewId);
+
+  try {
+    const review = await prisma.review.findUnique({
+      where: { id: reviewId },
+      include: {
+        user: true,
+        comments: true,
+        movie: true,
+      },
+    });
+
+    if (!review) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+
+    res.status(200).json(review);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+module.exports = router;
+
 //GET /api/reviews/id/comments
 router.get('/:id/comments', async (req, res) => {
   const reviewId = parseInt(req.params.id);

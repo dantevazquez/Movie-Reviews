@@ -15,6 +15,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+//GET api/movies/movie-id
 router.get('/:id', async (req, res) => {
   const movieId = parseInt(req.params.id);
 
