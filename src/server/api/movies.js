@@ -56,5 +56,35 @@ router.post("/", verify, async (req, res, next) => {
   }
 });
 
+//DELETE api/movies/id
+router.delete("/:id", verify, async (req, res, next) => {
+  const movieId= parseInt(req.params.id);
+
+  //check if the movie to delete exists
+  try{
+    const existingMovie = await prisma.movie.findUnique({
+      where: { id: movieId },
+    });
+
+    if (!existingMovie) {
+      return res.status(404).json({ error: 'Movie not found'});
+    }
+
+    //check is the user is an admin
+    if (exisitingMovie.userId !== req.user.isAdmin) {
+      return res.status(403).json({ error: 'Unauthorized'});
+    }
+    
+    //Delete the movie
+    await prisma.movie.delete({
+      where: { id: movieId},
+    });
+
+    res.status(200).json('Movie deleted');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: 'Internal server error'});
+  }
+});
 
 module.exports = router;
