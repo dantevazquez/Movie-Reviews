@@ -20,6 +20,7 @@ function SignInRegisterPage() {
       localStorage.setItem('user', JSON.stringify(user));
 
       // Redirect to the home page
+      window.alert('User succesfully logged in!')
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
