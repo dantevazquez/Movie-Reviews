@@ -77,7 +77,7 @@ function MovieDetails() {
     <div>
       <h2>{movie.name}</h2>
       <img src={movie.imgLink} alt={movie.name} style={{ maxWidth: '100%' }} />
-      <p>Average Rating: {movie.avgRating}</p>
+      <p>Average Rating: {movie.avgRating.toFixed(1)}</p>
       <p>Genre: {movie.genre}</p>
       <p>Release Year: {movie.releaseYear}</p>
       <p>Director: {movie.director}</p>
