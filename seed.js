@@ -4,7 +4,7 @@ require('dotenv').config();
 const { MovieDb } = require('moviedb-promise');
 const moviedb = new MovieDb(process.env.API_KEY);
 
-NUM_PAGES = 50;
+NUM_PAGES = process.env.NUM_PAGES;
 
 const genres = {
   28: "Action",
@@ -58,7 +58,7 @@ function seedMovies(page) {
 
 async function main() {
 
-  for(let i = 1; i < NUM_PAGES; i++){
+  for(let i = 1; i <= NUM_PAGES; i++){
     seedMovies(i);
   }
   const saltRounds = 5;
