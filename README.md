@@ -4,7 +4,7 @@ Rotten Potatoes is your go-to platform for movie reviews. With a catalogue of ov
 
 ## Check Out the Website 🌐
 
-Experience Rotten Potatoes for yourself [here](https://movie-reviews-n8mv.onrender.com/).
+Experience Rotten Potatoes for yourself<a href="https://movie-reviews-n8mv.onrender.com/" target="_blank">here</a>.
 
 **Note**: Our website is hosted on the lowest tier of Render, so you may experience slower performance. We appreciate your patience and understanding.
 
