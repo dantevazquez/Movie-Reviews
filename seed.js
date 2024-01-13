@@ -4,7 +4,7 @@ require('dotenv').config();
 const { MovieDb } = require('moviedb-promise');
 const moviedb = new MovieDb(process.env.API_KEY);
 
-NUM_PAGES = 500;
+NUM_PAGES = 50;
 
 const genres = {
   28: "Action",

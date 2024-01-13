@@ -50,10 +50,14 @@ router.post("/login", async (req, res, next) => {
 
 //POST auth/register
 router.post("/register", async (req, res, next) => {
-  
   const { username, password, email } = req.body;
 
-  //check if a user exists
+  // Input validation
+  if (!username || !password || !email) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  // Check if a user exists
   const existingUser = await prisma.user.findFirst({
     where: {
       OR: [
@@ -67,15 +71,15 @@ router.post("/register", async (req, res, next) => {
     return res.status(400).json({ error: "User already exists" });
   }
 
-  //User doesnt exist so create a new user
-  const SALT_ROUNDS = 5;
+  // User doesn't exist so create a new user
+  const SALT_ROUNDS = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   try {
     const user = await prisma.user.create({
       data: {
-        username,
+        username: username,
         password: hashedPassword,
-        email,
+        email: email,
         isAdmin: false,
       },
     });
@@ -86,8 +90,10 @@ router.post("/register", async (req, res, next) => {
     res.status(201).send({ token });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
 
 // POST auth/make-admin
 //Only the admin seeded has access to this call initially

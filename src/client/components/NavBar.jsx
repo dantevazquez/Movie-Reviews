@@ -2,6 +2,8 @@ import { CgProfile } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
+
+
 function NavBar() {
   const navigate = useNavigate();
 

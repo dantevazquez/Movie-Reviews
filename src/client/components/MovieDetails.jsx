@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Review from './Review';
 import PotatoRating from './PotatoRating';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function MovieDetails() {
   const [movie, setMovie] = useState(null);
@@ -43,6 +45,11 @@ function MovieDetails() {
 
       //convert string number to a number
       const numericRating = parseInt(rating, 10);
+
+      if (numericRating < 1) {
+        toast.error('You must give at least one potato!');
+        return;
+      }
       const reviewData = { rating: numericRating, textBody };
 
       //post data to server
@@ -63,6 +70,8 @@ function MovieDetails() {
       // Clear the form fields
       setRating(0);
       setTextBody('');
+
+      toast.success("Your review has been submitted!");
     } catch (error) {
       console.error('Error submitting review:', error);
     }
@@ -101,9 +110,11 @@ function MovieDetails() {
           <textarea
             value={textBody}
             onChange={(e) => setTextBody(e.target.value)}
+            required
           />
           <br />
           <button className='submit-review-button'type="submit">Submit Review</button>
+          <ToastContainer />
         </form>
 
         <h3>Reviews</h3>

@@ -273,6 +273,12 @@ li {
   margin-top: 10px;
 }
 
+.potato-image-review{
+  width: 30px;
+  max-width: 100%;
+  height: auto;
+}
+
 .potato-image-rating.selected {
   filter: none; 
 }

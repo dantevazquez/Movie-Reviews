@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SignInRegisterPage() {
   const [username, setUsername] = useState('');
@@ -20,11 +22,10 @@ function SignInRegisterPage() {
       localStorage.setItem('user', JSON.stringify(user));
 
       // Redirect to the home page
-      window.alert('User succesfully logged in!')
       navigate('/');
     } catch (error) {
       console.error('Login error:', error);
-      window.alert('Login unsuccessful. Please check your credentials and try again.');
+      toast.error('Login unsuccessful. Please check your credentials and try again.');
     }
   };
 
@@ -46,6 +47,7 @@ function SignInRegisterPage() {
       </form>
 
       <p>Don't have an account? <Link to="/create-account">Create Account</Link></p>
+      <ToastContainer/>
     </div>
   );
 }

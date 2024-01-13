@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Profile() {
@@ -89,6 +91,7 @@ function Profile() {
       // Fetch comments again after deleting the review
       const response = await axios.get(`/api/users/${user.id}/comments`);
       setComments(response.data);
+      toast.success("Review Deleted");
     } catch (error) {
       console.error(error);
     }
@@ -104,6 +107,7 @@ function Profile() {
       });
 
       setComments(comments.filter((comment) => comment.id !== commentId));
+      toast.success("Comment Deleted");
     } catch (error) {
       console.error(error);
     }
@@ -152,6 +156,7 @@ function Profile() {
 
         </div>
       ))}
+      <ToastContainer/>
     </div>
   );
 }
