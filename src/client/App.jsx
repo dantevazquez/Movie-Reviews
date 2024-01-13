@@ -7,6 +7,7 @@ import SignInRegisterPage from "./components/SignInRegisterPage";
 import CreateAccountPage from "./components/CreateAccountPage";
 import Profile from "./components/Profile";
 import AdminPage from "./components/AdminPage";
+import Footer from "./components/Footer";
 
 function App() {
  
@@ -22,6 +23,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
+      <Footer/>
     </div>
   );
 }

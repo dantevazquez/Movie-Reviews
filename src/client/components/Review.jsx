@@ -8,7 +8,7 @@ function Review({ review }) {
   }
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+    <div style={{ borderTop: '1px solid #dfe1e5', marginBottom: '10px' }}>
       <p><strong>User:</strong> {review.user.username}</p>
       <p><strong>Rating:</strong> {review.rating}</p>
       <p><strong>Text:</strong> {review.textBody}</p>

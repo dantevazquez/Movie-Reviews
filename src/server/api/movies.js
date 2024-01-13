@@ -4,9 +4,23 @@ const prisma = require("../client");
 const {verify} = require("../util");
 
 // GET /api/movies
+// GET /api/movies
 router.get("/", async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 100; // Change this to the number of movies you want to return per page
+  const searchTerm = req.query.search || '';
+
   try {
-    const movies = await prisma.movie.findMany();
+    const movies = await prisma.movie.findMany({
+      where: {
+        name: {
+          contains: searchTerm,
+          mode: 'insensitive', // This makes the search case-insensitive
+        },
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
     res.status(200).send(movies);
   } catch (error) {
     console.error(error);
@@ -14,6 +28,7 @@ router.get("/", async (req, res, next) => {
     await prisma.$disconnect();
   }
 });
+
 
 //GET api/movies/movie-id
 router.get('/:id', async (req, res) => {

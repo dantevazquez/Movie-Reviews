@@ -54,20 +54,18 @@ function CommentsPage() {
   return (
     <div>
       <h2>Review Comments</h2>
-      <Comments comments={comments} />
-
       <h3>Write a Comment</h3>
       <form onSubmit={handleCommentSubmit}>
-        <label>
-          Comment:
-          <textarea
+        <label>Comment:</label>
+        <br/>
+        <textarea
             value={textBody}
             onChange={(e) => setTextBody(e.target.value)}
           />
-        </label>
         <br />
-        <button type="submit">Submit Comment</button>
+        <button className='submit-comment-button'type="submit">Submit Comment</button>
       </form>
+      <Comments comments={comments} />
     </div>
   );
 }

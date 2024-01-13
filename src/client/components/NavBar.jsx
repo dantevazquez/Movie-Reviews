@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import { CgProfile } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
 function NavBar() {
   const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     // remove user auth from cache
@@ -13,10 +12,6 @@ function NavBar() {
 
     // Redirect to the sign-in/register page
     navigate('/');
-  };
-
-  const handleToggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
   };
 
   // Read user information from cache
@@ -28,40 +23,34 @@ function NavBar() {
       <Link to="/" className="link-style">
         <div className="logo-container">
           <img src="https://img.icons8.com/doodle/48/potato--v1.png" alt="Home" className="logo" />
-          <h2>Rotten Potatoes</h2>
+          <h2 className='site-title'>Rotten Potatoes</h2>
         </div>
       </Link>
-
-
-      <div className="dropdown-container">
+  
+      <nav className='drop-down'>
+        <label htmlFor="touch">
+          <span className='nav-button' onClick={() => user ? null : navigate('/signin-register')}>
+            {user ? (
+              <div className="user-profile">
+                <CgProfile size={24} style={{ marginRight: '0.5em', verticalAlign: 'middle' }} />
+                {user.username}
+              </div>
+            ) : 'Sign In'}
+          </span>
+        </label>
+  
         {user && (
-          <button className="dropdown-button-main" onClick={handleToggleDropdown}>
-            {user.username}
-          </button>
+          <>
+            <ul className="slide">
+              <li href="#" onClick={() => navigate('/profile')}>Profile</li>
+              <li href="#" onClick={handleLogout}>Logout</li>
+              {user.isAdmin && (
+                <li href="#" onClick={() => navigate('/admin')}>Admin</li>
+              )}
+            </ul>
+          </>
         )}
-
-        {/* This is the users drop-down menu */}
-        {user && isDropdownOpen && (
-          <div className="dropdown-menu">
-            <button className="dropdown-button" onClick={() => navigate('/profile')}>Profile</button>
-            <button className="dropdown-button" onClick={handleLogout}>Logout</button>
-            {user.isAdmin && (
-              <Link to="/admin">
-                <button className="dropdown-button">Admin</button>
-              </Link>
-            )}
-          </div>
-        )}
-
-        {/* When user is not logged in display this */}
-        {!user && (
-          <Link to="/signin-register">
-            <button className="dropdown-button-main">Sign In</button>
-          </Link>
-        )}
-      </div>
-
-
+      </nav>
     </nav>
   );
 }
