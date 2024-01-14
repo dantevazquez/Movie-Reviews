@@ -11,19 +11,31 @@ function AllMovies() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     async function getMovies() {
       setLoading(true);
       try {
-        const { data: foundMovies } = await axios.get(`/api/movies?search=${searchTerm}&page=${page}`);
+        const { data: foundMovies } = await axios.get(`/api/movies?search=${searchTerm}&page=${page}`, {
+          cancelToken: source.token,
+        });
         setMovies((prevMovies) => [...prevMovies, ...foundMovies]);
         setLoading(false);
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          console.log('Request canceled', error.message);
+        } else {
+          console.error(error);
+        }
         setLoading(false);
       }
     }
 
     getMovies();
+
+    return () => {
+      source.cancel();
+    };
   }, [page, searchTerm]);
 
   const loadMoreMovies = () => {
