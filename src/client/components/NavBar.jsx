@@ -1,4 +1,6 @@
 import { CgProfile } from "react-icons/cg";
+import { CgLogOut } from "react-icons/cg";
+import { CgOptions } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
@@ -44,8 +46,8 @@ function NavBar() {
         {user && (
           <>
             <ul className="slide">
-              <li href="#" onClick={() => navigate('/profile')}>Profile</li>
-              <li href="#" onClick={handleLogout}>Logout</li>
+              <li href="#" onClick={() => navigate('/profile')}> <CgOptions size={24} style={{ marginRight: '0.5em', verticalAlign: 'middle' }}  /> Profile</li>
+              <li href="#" onClick={handleLogout}><CgLogOut size={24} style={{ marginRight: '0.5em', verticalAlign: 'middle' }}  /> Logout</li>
               {user.isAdmin && (
                 <li href="#" onClick={() => navigate('/admin')}>Admin</li>
               )}
