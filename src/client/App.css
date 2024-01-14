@@ -228,10 +228,12 @@ li {
   background-color: #333;
   color: white;
   cursor: pointer;
-  font-size: 24px;
   transition: background-color 0.3s ease;
   display: block;
-  margin: 0 auto;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .load-more-button:hover {
@@ -242,8 +244,11 @@ li {
   background-color: #3D3D3D;
 }
 
-.load-more-button::after {
-  content: "⬇";
+
+
+.load-more-border{
+  border-bottom: 1px solid #dfe1e5;
+  border-radius: 4px;
 }
 
 /* Profile component */

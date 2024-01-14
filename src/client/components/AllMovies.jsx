@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../App.css';
+import { MdExpandMore } from "react-icons/md";
 
 // AllMovies component
 function AllMovies() {
@@ -59,7 +60,7 @@ function AllMovies() {
       </div>
       <div className='scroll-box-allmovies'>
 
-      <div className="movies-container">
+        <div className="movies-container">
 
           {movies.map((movie) => (
             <Link key={movie.id} to={`/movies/${movie.id}`} className="link-style">
@@ -79,7 +80,12 @@ function AllMovies() {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <button className='load-more-button' onClick={loadMoreMovies}></button>
+          <div>
+            <div className="load-more-border" ></div>
+            <button className='load-more-button' onClick={loadMoreMovies}>
+              <MdExpandMore size={58}/>
+            </button>
+          </div>
         )}
       </div>
 
